@@ -9,12 +9,17 @@ using ToDoApp.Models;
 
 namespace ToDoApp.DataAccess.Repository
 {
-    public class ToDoAuditRepository : Repository<ToDoAudit>, IToDoAuditRepository
+    public class LoginRepository : ILoginRepository
     {
         private ApplicationDbContext _db;
-        public ToDoAuditRepository(ApplicationDbContext db):base(db)
+        public LoginRepository(ApplicationDbContext db)
         {
             _db = db;
+        }
+        public UserModel GetFirstOrDefaultUser(UserModel obj)
+        {
+            var retriveUserFromDb = _db.UsersModel.Where(a=>a.UserName == obj.UserName && a.Password==obj.Password).FirstOrDefault();
+            return retriveUserFromDb;
         }
     }
 }

@@ -9,15 +9,17 @@
         <div class="col-6">
             <h2 class = "text-primary">To-Do</h2>
         </div>
+        
         <div class="col-6 text-end">
             <a asp-controller="ToDoList" asp-action="Create" class="btn btn-primary">
                 <i class="bi bi-file-earmark-plus"></i>&nbsp; Add
             </a>
         </div>
     </div>
-    <table class ="table table-border table-striped" style="width:100%">
+    <table class ="table table-border " style="width:100%">
         <thead>
             <tr>
+                <th ></th>
                 <th>Title</th>
                 <th>Due Date</th>
                 <th></th>
@@ -27,7 +29,18 @@
         <tbody>
         @foreach(var obj in Model)
         {
-            <tr>
+                @*<div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                    <label class="form-check-label" for="flexSwitchCheckDefault">Default switch checkbox input</label>
+                    </div>*@
+                @if (obj.isDone)
+                {
+                    <tr class="table-success " id="TableRow">
+                        <td class="btn-group" role = "group">
+                        
+                            <a asp-controller="ToDoList"  asp-action="IsDone" asp-route-id="@obj.Id"  class="btn bi bi-toggle-on" style="cursor: pointer" ></a>
+                        
+                    </td>
                 <td width="60%">
                     @obj.Title
                 </td>
@@ -36,21 +49,74 @@
                 </td>
                 <td width="25%">
                     <div class ="w-40 btn-group" role ="group">
-                        <a asp-controller="ToDoList" asp-action="Edit" asp-route-id="@obj.Id" class="btn btn-outline-secondary mx-2"><i class="bi bi-pencil-square"></i>&nbsp; Edit</a>
+                        <a asp-controller="ToDoList" asp-action="Edit" asp-route-id="@obj.Id" asp-route-UserId="@obj.UserId" class="btn btn-outline-secondary mx-2"><i class="bi bi-pencil-square"></i>&nbsp; Edit</a>
                     </div>
                     <div class ="w-40 btn-group" role ="group">
                         <a asp-controller="ToDoList" asp-action="Delete" asp-route-id="@obj.Id" class="btn btn-outline-warning mx-2"><i class="bi bi-trash"></i>&nbsp; Delete</a>
                     </div>
                 </td>
-            </tr>
-        }
+                    </tr>
+                }
+                else
+                {
+                   <tr class="table-light " id="TableRow">
+                        <td class="btn-group" role = "group">
+                        
+                            <a asp-controller="ToDoList"  asp-action="IsDone" asp-route-id="@obj.Id"  class="btn bi bi-toggle-off" style="cursor: pointer" ></a>
+                        
+                    </td>
+                <td width="60%">
+                    @obj.Title
+                </td>
+                <td width="15%">
+                    @obj.DueDate.ToShortDateString()
+                </td>
+                <td width="25%">
+                    <div class ="w-40 btn-group" role ="group">
+                        <a asp-controller="ToDoList" asp-action="Edit" asp-route-id="@obj.Id" asp-route-UserId="@obj.UserId" class="btn btn-outline-secondary mx-2"><i class="bi bi-pencil-square"></i>&nbsp; Edit</a>
+                    </div>
+                    <div class ="w-40 btn-group" role ="group">
+                        <a asp-controller="ToDoList" asp-action="Delete" asp-route-id="@obj.Id" class="btn btn-outline-warning mx-2"><i class="bi bi-trash"></i>&nbsp; Delete</a>
+                    </div>
+                </td>
+                    </tr> 
+                }
+            }
     </tbody>
     </table>
     
 
 </div>
+@section scripts{
+    <script>
+        var toggleButton = document.querySelector("#toggleCheck")
 
+        
+        var row = document.getElementsByTagName("tr");
+        var button = document.querySelector(".toggleClass")
+        for (i=1; i < button.length; i++) {
+    button[i].addEventListener("click", toggleIcon);
+    //row[i].addEventListener("click", buttonClick);
+    }
+        function buttonClick(){
+            var button = this.getElementsByTagName("button")[0];
+            button.click();
+        }
+        function toggleIcon(){
+            this.classList.toggle("bi-toggle-off");
+            this.classList.toggle("bi-toggle-on");
+        }
+       function RowClick(){
+           var button = this.getElementsByTagName("button")[0];
+      //rows.classList.toggle("table-success")
+      //rows.classList.toggle("table-light")
+      this.classList.toggle("table-success");
+      this.classList.toggle("table-light");
+      button.classList.toggle("bi-toggle-off");
+        button.classList.toggle("bi-toggle-on");
+        }
 
-<table>
+        </script>
+        
+}
 
-</table>

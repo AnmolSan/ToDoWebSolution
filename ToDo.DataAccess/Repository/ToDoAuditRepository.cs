@@ -9,12 +9,17 @@ using ToDoApp.Models;
 
 namespace ToDoApp.DataAccess.Repository
 {
-    public class ToDoAuditRepository : Repository<ToDoAudit>, IToDoAuditRepository
+    public class ToDoRepository : Repository<ToDo>, IToDoRepository
     {
         private ApplicationDbContext _db;
-        public ToDoAuditRepository(ApplicationDbContext db):base(db)
+        public ToDoRepository(ApplicationDbContext db):base(db)
         {
             _db = db;
+        }
+        
+        public void Update(ToDo obj)
+        {
+            _db.ToDos.Update(obj);
         }
     }
 }

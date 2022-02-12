@@ -14,5 +14,25 @@ namespace ToDoApp.DataAccess.Data
         {
         }
         public DbSet<ToDo> ToDos { get; set; }
+        public DbSet<UserModel> UsersModel { get; set; }
+        public DbSet<ToDoAudit> ToDoAudits { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ToDoAudit>()
+                .Property(b => b.Field)
+                .IsRequired(false);//optinal case
+            modelBuilder.Entity<ToDoAudit>()
+                .Property(b => b.NewValue)
+                .IsRequired(false);
+            modelBuilder.Entity<ToDoAudit>()
+                .Property(b => b.OldValue)
+                .IsRequired(false);
+            modelBuilder
+                .Entity<ToDoAudit>()
+                .HasOne(e => e.User)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
+        }
+
     }
 }

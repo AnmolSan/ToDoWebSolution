@@ -1,22 +1,64 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using ToDoApp.DataAccess.Repository.IRepository;
 using ToDoApp.Models;
+using ToDoApp.Utility;
 
 namespace ToDoWeb.Areas.User.Controllers
 {
     public class ToDoList : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork; 
         public ToDoList(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;   
         }
         // GET: ToDoList
-        public ActionResult Index()
+        public ActionResult Index(ToDo? toDo)
         {
-            IEnumerable<ToDo>ObjToDoList = _unitOfWork.ToDo.GetAll();
-            return View(ObjToDoList);
+            //var userSession = HttpContext.Session.GetString("userSession");
+            var userSession = HttpContext.Session.Get<UserModel>("userSession");
+            if (userSession!= null)
+            {
+                //var convertToModel = JsonConvert.DeserializeObject<UserModel>(userSession);
+                IEnumerable<ToDo> ObjToDoList = _unitOfWork.ToDo.GetAll(a=>a.UserId == userSession.Id);
+                return View(ObjToDoList);
+            }
+
+            TempData["error"] = "Login To Access To-do List";
+            return RedirectToAction("Login","Home");
+        }
+        public ActionResult IsDone(int? id)
+        {
+            var userSession = HttpContext.Session.GetString("userSession");
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var todoFirstFromDb = _unitOfWork.ToDo.GetFirstOrDefault(x => x.Id == id);
+            if (todoFirstFromDb == null)
+            {
+                return NotFound();
+            }
+            if (todoFirstFromDb.isDone)
+                todoFirstFromDb.isDone = false;
+            else
+                todoFirstFromDb.isDone = true;
+
+            if (ModelState.IsValid)
+            {
+                if (string.IsNullOrEmpty(userSession))
+                {
+                    return RedirectToAction("Login","Home");
+                }
+                _unitOfWork.ToDo.Update(todoFirstFromDb);
+                _unitOfWork.Save();
+                TempData["success"] = "Record updated successfully";
+                return RedirectToAction("Index");
+            }
+            TempData["error"] = "Error ! To-do not updated successfully";
+            return View();
         }
 
         // GET: ToDoList/Create
@@ -30,9 +72,25 @@ namespace ToDoWeb.Areas.User.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(ToDo obj)
         {
+            //SessionVM sessionVM = new()
             if (obj.Title == null)
             {
                 TempData["emptyTitle"] = "Cannot save Empty Title";
+            }
+            //var userSession = HttpContext.Session.GetString("userSession");
+            var userSession = HttpContext.Session.Get<UserModel>("userSession");
+            if (userSession == null)
+            {
+                TempData["Error"] = "Please Login !! Your session has expire";
+                return RedirectToAction("Login", "Home");
+            }
+            //var convertToModel = JsonConvert.DeserializeObject<UserModel>(userSession);
+            obj.UserId = userSession.Id;
+            var sameTitle = _unitOfWork.ToDo.GetAll(a => a.UserId == obj.UserId && a.Title ==obj.Title);
+            if (sameTitle.Any())
+            {
+                TempData["error"] = "Cannot add dublicate Title";
+                return View();
             }
             if (ModelState.IsValid)
             {
@@ -48,7 +106,7 @@ namespace ToDoWeb.Areas.User.Controllers
         // GET: ToDoList/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (id == null || id == 0)
+            if (id == null || id == 0 )
             {
                 return NotFound();
             }

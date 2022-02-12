@@ -12,7 +12,7 @@ namespace ToDoApp.DataAccess.Repository.IRepository
         // T- ToDo
         T GetFirstOrDefault(Expression<Func<T, bool>> filter);
 
-        IEnumerable<T> GetAll();
+        IEnumerable<T> GetAll(Expression<Func<T, bool>> filterForUserId);
         void Add(T entity);
         void Remove(T entity);
         void RemoveRange(IEnumerable<T> entities);

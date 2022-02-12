@@ -1,0 +1,51 @@
+﻿@model UserModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<form method="post">
+  <fieldset>
+    <legend>Login</legend>
+    <div class="form-group">
+      <label asp-for="UserName" class="form-label mt-4"></label>
+      <input asp-for="UserName" class="form-control" placeholder="Enter User Name">
+      <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+      <label asp-for="Password" class="form-label mt-4"></label>
+     <div class="input-group mb-3">
+      <input asp-for="Password" type="password" id="password" class="form-control" placeholder="Password" aria-label="password" aria-describedby="button-addon2">
+      <button type="button" class="btn border-dark bi-eye-slash" id="togglePassword" style="cursor: pointer" ></button>
+    </div>
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    
+    </fieldset>
+    <fieldset>
+    <button type="submit" class="btn btn-primary mt-3" style ="width:150px">Login</button>
+       <a asp-controller="Home" asp-action="Index" class="btn btn-secondary mt-3" style="width:150px">Back</a>
+    
+  </fieldset>
+</form>
+
+@section scripts{
+    <script>
+    const togglePassword = document.querySelector("#togglePassword");
+    const password = document.querySelector("#password");
+
+    togglePassword.addEventListener("click", function () {
+   
+      // toggle the type attribute
+      const type = password.getAttribute("type") === "password" ? "text" : "password";
+      password.setAttribute("type", type);
+      // toggle the eye icon
+      this.classList.toggle('bi-eye-slash');
+      this.classList.toggle('bi-eye');
+      
+     
+          
+      
+      
+    });
+</script>
+}

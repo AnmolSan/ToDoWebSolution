@@ -22,11 +22,13 @@ namespace ToDoApp.DataAccess.Repository
         public void Add(T entity)
         {
             dbSet.Add(entity);
+                
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>> filterForUserId)
         {
             IQueryable<T> query = dbSet;
+            query = query.Where(filterForUserId);
             return query.ToList();
         }
 
