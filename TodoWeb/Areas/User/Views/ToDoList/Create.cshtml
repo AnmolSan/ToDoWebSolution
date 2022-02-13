@@ -18,7 +18,7 @@
         </div>
         <div class="mb-3">
             <label asp-for="DueDate"class="form-label mt-4"></label>
-            <input type="date" asp-for="DueDate" class="form-control" />
+            <input type="datetime-local" id="dateAndTimePicker" asp-for="DueDate" class="form-control" />
             <span asp-validation-for="DueDate" class="text-danger"></span>
         </div>
        <button type="submit" class="btn btn-primary" style="width:150px">Add</button>
@@ -26,3 +26,8 @@
 
     </div>
 </form>
+@section scripts{
+    <script>
+        flatpickr("#dateAndTimePicker", { enableTime: true, dataFormat: "d-m-Y" });
+    </script>
+}

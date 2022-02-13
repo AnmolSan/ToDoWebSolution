@@ -29,6 +29,21 @@ namespace ToDoWeb.Areas.User.Controllers
             TempData["error"] = "Login To Access To-do List";
             return RedirectToAction("Login","Home");
         }
+        [HttpPost]
+        
+        
+            
+        public JsonResult AjaxMethod(string id, bool isDoneInput)
+        {
+
+            var todo = _unitOfWork.ToDo.GetFirstOrDefault(a => a.Id == Convert.ToInt16(id));
+            todo.isDone = isDoneInput;
+            _unitOfWork.Save();
+            if (todo.isDone)
+                return Json("Complete");
+            return Json("Incomplete");
+
+        }
         public ActionResult IsDone(int? id)
         {
             var userSession = HttpContext.Session.GetString("userSession");

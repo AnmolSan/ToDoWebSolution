@@ -29,18 +29,17 @@
         <tbody>
         @foreach(var obj in Model)
         {
-                @*<div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-                    <label class="form-check-label" for="flexSwitchCheckDefault">Default switch checkbox input</label>
-                    </div>*@
-                @if (obj.isDone)
-                {
-                    <tr class="table-success " id="TableRow">
-                        <td class="btn-group" role = "group">
-                        
-                            <a asp-controller="ToDoList"  asp-action="IsDone" asp-route-id="@obj.Id"  class="btn bi bi-toggle-on" style="cursor: pointer" ></a>
+               
+                <tr class="table-light " id="TableRow">
+                    <td hidden>
+                        @obj.Id
+                    </td>
+                    <td class="form-check">
+                        <input class = "form-check-input" onchange='handleChange(this);' type="checkbox" name="status" id="flexCheckDefault">
+                        @*<a asp-controller="ToDoList"  asp-action="IsDone" asp-route-id="@obj.Id"  class="btn bi bi-toggle-on" style="cursor: pointer" ></a>*@
                         
                     </td>
+
                 <td width="60%">
                     @obj.Title
                 </td>
@@ -56,39 +55,35 @@
                     </div>
                 </td>
                     </tr>
-                }
-                else
-                {
-                   <tr class="table-light " id="TableRow">
-                        <td class="btn-group" role = "group">
-                        
-                            <a asp-controller="ToDoList"  asp-action="IsDone" asp-route-id="@obj.Id"  class="btn bi bi-toggle-off" style="cursor: pointer" ></a>
-                        
-                    </td>
-                <td width="60%">
-                    @obj.Title
-                </td>
-                <td width="15%">
-                    @obj.DueDate.ToShortDateString()
-                </td>
-                <td width="25%">
-                    <div class ="w-40 btn-group" role ="group">
-                        <a asp-controller="ToDoList" asp-action="Edit" asp-route-id="@obj.Id" asp-route-UserId="@obj.UserId" class="btn btn-outline-secondary mx-2"><i class="bi bi-pencil-square"></i>&nbsp; Edit</a>
-                    </div>
-                    <div class ="w-40 btn-group" role ="group">
-                        <a asp-controller="ToDoList" asp-action="Delete" asp-route-id="@obj.Id" class="btn btn-outline-warning mx-2"><i class="bi bi-trash"></i>&nbsp; Delete</a>
-                    </div>
-                </td>
-                    </tr> 
-                }
+                
+                
             }
     </tbody>
     </table>
     
 
 </div>
-@section scripts{
-    <script>
+
+@section scripts{        
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>         
+
+    <script type="text/javascript">
+        //var tableRow = document.getElementsByTagName("tr")
+        //var checkbox = document.getElementsByTagName("input[name='status']");
+        //for (i=1 , i<checkbox.length,i++){
+        //    checkbox[i].addEventListener("click",function(){
+        //        var tableRow = document.getElementsByTagName("tr");
+        //        //this.parentElement.parentElement
+        //        var id = tableRow[i].children[0].innerHTML;
+        //        Is_complete(id,this.checked);
+                
+        //    });
+        //}
+        
+        
+w
+    </script>
+   @* <script>
         var toggleButton = document.querySelector("#toggleCheck")
 
         
@@ -117,6 +112,6 @@
         }
 
         </script>
-        
+        *@
 }
 
