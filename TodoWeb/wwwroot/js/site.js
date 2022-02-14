@@ -16,7 +16,20 @@ function handleChange(checkbox) {
     var id = tableRow.children[0].innerHTML;
     var id_trim = id.trim();
     var status = checkbox.checked
+
+    if (status) {
+        tableRow.classList.remove("table-light");
+        tableRow.classList.add("table-success");
+        
+    }
+    else {
+        tableRow.classList.remove("table-success");
+        tableRow.classList.add("table-light");
+
+        
+    }
     Is_complete(id_trim, status);
+    
 };
 
 
